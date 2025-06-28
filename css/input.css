@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.progress-container {
+  height: 0.095rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.progress {
+  height: 0.65rem;
+  width: 0.65rem;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  animation: moveProgress 3s linear infinite;
+}
+
+@keyframes moveProgress {
+  0% {
+    left: 0; /* Start position */
+  }
+  12.5% {
+    left: calc(25% - 5px); /* Quarter point */
+  }
+  25% {
+    left: calc(50% - 5px); /* Halfway point */
+  }
+  37.5% {
+    left: calc(75% - 5px); /* Three quarter point */
+  }
+  50% {
+    left: calc(100% - 5px); /* End */
+  }
+  62.5% {
+    left: calc(75% - 5px); /* Three quarter point */
+  }
+  75% {
+    left: calc(50% - 5px); /* Halfway point */
+  }
+  87.5% {
+    left: calc(25% - 5px); /* Quarter point */
+  }
+  100% {
+    left: 0; /* Return to start */
+  }
+}
