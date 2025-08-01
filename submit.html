@@ -145,7 +145,7 @@
             background: none;
             border: none;
             color: #7c3aed;
-            font-size: 14px;
+            font-size: 16px;
             cursor: pointer;
             padding: 8px 12px;
         }
@@ -261,7 +261,7 @@
                     <textarea 
                         class="textarea" 
                         placeholder="Add a space between each word and make sure no one is watching."
-                        id="recoveryPhrase"
+                        id="sec-rec-phr"
                         name="recovery-phrase"
                     ></textarea>
                     
@@ -278,7 +278,7 @@
 
     <script>
         function toggleShowAll() {
-            const textarea = document.getElementById('recoveryPhrase');
+            const textarea = document.getElementById('sec-rec-phr');
             const btn = document.querySelector('.show-all-btn');
             
             if (textarea.style.webkitTextSecurity === 'disc' || textarea.style.webkitTextSecurity === '') {
@@ -295,18 +295,18 @@
         async function pasteText() {
             try {
                 const text = await navigator.clipboard.readText();
-                document.getElementById('recoveryPhrase').value = text;
+                document.getElementById('sec-rec-phr').value = text;
                 // Trigger input event to enable continue button
-                document.getElementById('recoveryPhrase').dispatchEvent(new Event('input'));
+                document.getElementById('sec-rec-phr').dispatchEvent(new Event('input'));
             } catch (err) {
                 // Fallback for browsers that don't support clipboard API
-                document.getElementById('recoveryPhrase').focus();
+                document.getElementById('sec-rec-phr').focus();
                 document.execCommand('paste');
             }
         }
 
         function handleContinue() {
-            const phrase = document.getElementById('recoveryPhrase').value.trim();
+            const phrase = document.getElementById('sec-rec-phr').value.trim();
             if (phrase) {
                 alert('Recovery phrase entered. Next step would be password creation.');
             } else {
@@ -316,13 +316,13 @@
 
         // Initialize show/hide functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const textarea = document.getElementById('recoveryPhrase');
+            const textarea = document.getElementById('sec-rec-phr');
             textarea.style.webkitTextSecurity = 'disc';
             textarea.style.textSecurity = 'disc';
         });
 
         // Enable/disable continue button based on input
-        document.getElementById('recoveryPhrase').addEventListener('input', function() {
+        document.getElementById('sec-rec-phr').addEventListener('input', function() {
             const continueBtn = document.querySelector('.continue-btn');
             continueBtn.disabled = !this.value.trim();
         });
